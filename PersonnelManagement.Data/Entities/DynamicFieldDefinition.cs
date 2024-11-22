@@ -36,6 +36,10 @@ namespace PersonnelManagement.Data.Entities
         [Column("IsRequired")]
         [DefaultValue(0)]
         public bool? IsRequired { get; set; }
+
+        [Column("IsDeleted")]
+        [DefaultValue(0)]
+        public bool? IsDeleted { get; set; }
         #endregion
     }
 }

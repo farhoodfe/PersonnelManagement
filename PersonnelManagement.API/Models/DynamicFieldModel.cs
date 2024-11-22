@@ -9,5 +9,6 @@ namespace PersonnelManagement.API.Models
         public string? DisplayName { get; set; }
         public FieldType? Type { get; set; }
         public bool? IsRequired { get; set; }
+        public bool? IsDeleted { get; set; }
     }
 }
