@@ -9,7 +9,7 @@ namespace PersonnelManagement.Service.Contracts
 {
     public interface IFieldDefinitionService
     {
-        int CreateField(NewFieldDTO field);
+        Task<long> CreateFieldAsync(NewFieldDTO field);
         int UpdateField(long id, NewFieldDTO field);
         bool DeleteField(long id);
         ICollection<NewFieldDTO> GetAllFieldsAsync();

@@ -15,7 +15,7 @@ namespace PersonnelManagement.Data
             
         //}
 
-        public DbSet<FieldDefinition> Fields { get; set; }
+        public DbSet<DynamicFieldDefinition> Fields { get; set; }
         public DbSet<FieldSubmission> Submissions { get; set; }
         public DbSet<PersonInfo> PersonInfos { get; set; }
 

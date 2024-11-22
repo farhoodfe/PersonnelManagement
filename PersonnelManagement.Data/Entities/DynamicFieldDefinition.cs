@@ -13,8 +13,8 @@ namespace PersonnelManagement.Data.Entities
     /// <summary>
     /// Class for Defining dynamic PersonInfo fields
     /// </summary>
-    [Table("FieldDefinition", Schema = "MIS")]
-    public class FieldDefinition
+    [Table("DynamicFieldDefinition", Schema = "MIS")]
+    public class DynamicFieldDefinition
     {
         #region Propertys
         [Key]

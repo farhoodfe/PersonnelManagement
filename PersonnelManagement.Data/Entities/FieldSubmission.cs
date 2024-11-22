@@ -27,7 +27,7 @@ namespace PersonnelManagement.Data.Entities
         public long Fk_FieldDefinition { get; set; }
 
         [ForeignKey("Fk_FieldDefinition")]
-        public virtual FieldDefinition fieldDefinition { get; set; }
+        public virtual DynamicFieldDefinition fieldDefinition { get; set; }
 
         [Column("fk_PersonInfo")]
         public long Fk_PersonInfo { get; set; }
