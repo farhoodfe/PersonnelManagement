@@ -48,9 +48,9 @@ namespace PersonnelManagement.Service.Services
             throw new NotImplementedException();
         }
 
-        public ICollection<NewFieldDTO> GetAllFieldsAsync()
+        public async Task<ICollection<NewFieldDTO>> GetAllFieldsAsync(string? search, int pageSize, int pageNumber)
         {
-            throw new NotImplementedException();
+            
         }
 
         public int UpdateField(long id, NewFieldDTO field)
