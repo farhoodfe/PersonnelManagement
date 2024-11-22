@@ -1,0 +1,50 @@
+﻿@model List<DynamicFieldDto>
+
+@{
+    ViewBag.Title = "Create Personnel";
+}
+
+<h2>Create Personnel</h2>
+
+<form asp-action="Create" method="post">
+    <!-- Static fields -->
+    <div>
+        <label>Name:</label>
+        <input type="text" name="Name" required />
+    </div>
+
+    <div>
+        <label>Personnel Code:</label>
+        <input type="text" name="PersonnelCode" required />
+    </div>
+
+    <div>
+        <label>Last Name:</label>
+        <input type="text" name="LastName" required />
+    </div>
+
+    <!-- Dynamic fields -->
+    @foreach (var field in Model)
+    {
+        <div>
+            <label>@field.DisplayName:</label>
+
+            <!-- Render input based on field type -->
+            @switch (field.Type)
+            {
+                case 0: // Assuming 0 = Text
+                    <input type="text" name="DynamicFields[@field.Id]" />
+                    break;
+                case 1: // Assuming 1 = Number
+                    <input type="number" name="DynamicFields[@field.Id]" />
+                    break;
+                case 2: // Assuming 2 = Date
+                    <input type="date" name="DynamicFields[@field.Id]" />
+                    break;
+                    // Add other types if needed
+            }
+        </div>
+    }
+
+    <button type="submit">Save</button>
+</form>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonnelManagement.API", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonnelManagement.Service", "PersonnelManagement.Service\PersonnelManagement.Service.csproj", "{6CBE97E0-287E-4358-98D0-C5C909D4260F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonnelManagement.RazorUI", "PersonnelManagement.RazorUI\PersonnelManagement.RazorUI.csproj", "{FE79ECDE-7D39-4D8B-8648-243057B8A4CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6CBE97E0-287E-4358-98D0-C5C909D4260F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CBE97E0-287E-4358-98D0-C5C909D4260F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CBE97E0-287E-4358-98D0-C5C909D4260F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE79ECDE-7D39-4D8B-8648-243057B8A4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE79ECDE-7D39-4D8B-8648-243057B8A4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE79ECDE-7D39-4D8B-8648-243057B8A4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE79ECDE-7D39-4D8B-8648-243057B8A4CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

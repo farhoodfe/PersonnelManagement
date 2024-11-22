@@ -1,0 +1,47 @@
+﻿@page
+@model CreateModel
+
+<h2>Create Personnel</h2>
+
+<form method="post">
+    <!-- Static fields -->
+    <div>
+        <label>Name:</label>
+        <input type="text" asp-for="Name" required />
+    </div>
+
+    <div>
+        <label>Personnel Code:</label>
+        <input type="text" asp-for="PersonnelCode" required />
+    </div>
+
+    <div>
+        <label>Last Name:</label>
+        <input type="text" asp-for="LastName" required />
+    </div>
+
+    <!-- Dynamic fields -->
+    @foreach (var field in Model.DynamicFields)
+    {
+        <div>
+            <label>@field.displayName:</label>
+
+            <!-- Render input based on field type -->
+            @switch (field.type)
+            {
+                case 0: // Assuming 0 = Text
+                    <input type="text" name="DynamicFieldValues[@field.id]" />
+                    break;
+                case 1: // Assuming 1 = Number
+                    <input type="number" name="DynamicFieldValues[@field.id]" />
+                    break;
+                case 2: // Assuming 2 = Date
+                    <input type="date" name="DynamicFieldValues[@field.id]" />
+                    break;
+                    // Add other types if needed
+            }
+        </div>
+    }
+
+    <button type="submit">Save</button>
+</form>
