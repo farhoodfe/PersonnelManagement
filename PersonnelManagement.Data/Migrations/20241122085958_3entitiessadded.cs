@@ -12,7 +12,7 @@ namespace PersonnelManagement.Data.Migrations
                 name: "MIS");
 
             migrationBuilder.CreateTable(
-                name: "FieldDefinition",
+                name: "FieldDefinition", 
                 schema: "MIS",
                 columns: table => new
                 {
