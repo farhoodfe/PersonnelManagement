@@ -15,8 +15,14 @@ namespace PersonnelManagement.Service.Services
 {
     public class FieldDefinitionService : IFieldDefinitionService
     {
-        private readonly IRepository<Data.Entities.DynamicFieldDefinition> _RFieldDefinition;
+        private readonly IRepository<DynamicFieldDefinition> _RFieldDefinition;
         private readonly IMapper _mapper;
+
+        public FieldDefinitionService(IMapper mapper, IRepository<DynamicFieldDefinition> RFieldDefinition)
+        {
+            _mapper = mapper;
+            _RFieldDefinition = RFieldDefinition;
+        }
         public async Task<long> CreateFieldAsync(NewFieldDTO newField)
         {
             if (newField == null)
@@ -25,11 +31,11 @@ namespace PersonnelManagement.Service.Services
                 return -1;
             }
 
-            if (await _RFieldDefinition.GetAsync(u => u.FieldName.ToLower() == newField.FieldName.ToLower()) != null)
-            {
-                // نام فیلد تکراری است
-                return -2;
-            }
+            //if (await _RFieldDefinition.GetAsync(u => u.FieldName.ToLower() == newField.FieldName.ToLower()) != null)
+            //{
+            //    // نام فیلد تکراری است
+            //    return -2;
+            //}
 
             DynamicFieldDefinition fd = new DynamicFieldDefinition();
             fd = _mapper.Map<DynamicFieldDefinition>(newField);
