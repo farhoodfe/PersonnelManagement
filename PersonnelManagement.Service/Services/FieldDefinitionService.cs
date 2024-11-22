@@ -50,10 +50,10 @@ namespace PersonnelManagement.Service.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<NewFieldDTO>> GetAllFieldsAsync()
+        public async Task<ICollection<NewFieldDTO>> GetAllFieldsAsync(int pageSize=0, int pageNumber=1)
         {
             IEnumerable<DynamicFieldDefinition> fieldList;
-            fieldList = await _RFieldDefinition.GetAllAsync(u => u.IsDeleted == false);
+            fieldList = await _RFieldDefinition.GetAllAsync(u => u.IsDeleted == false || u.IsDeleted== null);
 
             List<NewFieldDTO> fields = new List<NewFieldDTO>();
 

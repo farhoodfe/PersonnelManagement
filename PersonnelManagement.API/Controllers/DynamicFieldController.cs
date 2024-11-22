@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using PersonnelManagement.API.Models;
 using PersonnelManagement.Service.Contracts;
 using PersonnelManagement.Service.DTOs;
+using System.Net.Mail;
+using System.Net;
+using System.Text.Json;
 
 namespace PersonnelManagement.API.Controllers
 {
@@ -42,6 +45,30 @@ namespace PersonnelManagement.API.Controllers
             }
         }
 
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetAllFields()
+        {
+            try
+            {
+                IEnumerable<NewFieldDTO> FieldsList;
+                FieldsList = await _FieldDefService.GetAllFieldsAsync(0,1); 
+
+                List<DynamicFieldModel> Fields = new List<DynamicFieldModel>();
+
+                foreach (NewFieldDTO f in FieldsList)
+                {
+                    Fields.Add(_mapper.Map<DynamicFieldModel>(f));
+                }
+                
+                return Ok(Fields);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
+        }
 
     }
 }

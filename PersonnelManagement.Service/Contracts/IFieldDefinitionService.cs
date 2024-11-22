@@ -12,6 +12,6 @@ namespace PersonnelManagement.Service.Contracts
         Task<long> CreateFieldAsync(NewFieldDTO field);
         int UpdateField(long id, NewFieldDTO field);
         bool DeleteField(long id);
-        Task<ICollection<NewFieldDTO>> GetAllFieldsAsync();
+        Task<ICollection<NewFieldDTO>> GetAllFieldsAsync(int pageSize, int pageNumber);
     }
 }
