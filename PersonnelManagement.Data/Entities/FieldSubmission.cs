@@ -18,7 +18,7 @@ namespace PersonnelManagement.Data.Entities
         [Key]
         [Column("pk_Id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Pk_Id { get; set; }
+        public long Id { get; set; }
 
         [Column("FieldValue")]
         public string? FieldValue { get; set; }
