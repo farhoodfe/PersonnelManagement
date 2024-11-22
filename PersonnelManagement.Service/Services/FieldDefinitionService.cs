@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using System.Net.Mail;
+using System.Net;
+using System.Text.Json;
 
 namespace PersonnelManagement.Service.Services
 {
@@ -48,9 +50,21 @@ namespace PersonnelManagement.Service.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<NewFieldDTO>> GetAllFieldsAsync(string? search, int pageSize, int pageNumber)
+        public async Task<ICollection<NewFieldDTO>> GetAllFieldsAsync()
         {
-            
+            IEnumerable<DynamicFieldDefinition> fieldList;
+            fieldList = await _RFieldDefinition.GetAllAsync(u => u.IsDeleted == false);
+
+            List<NewFieldDTO> fields = new List<NewFieldDTO>();
+
+            foreach (DynamicFieldDefinition f in fieldList)
+            {
+                fields.Add( _mapper.Map<NewFieldDTO>(f));
+            }
+
+            return fields;
+
+
         }
 
         public int UpdateField(long id, NewFieldDTO field)
