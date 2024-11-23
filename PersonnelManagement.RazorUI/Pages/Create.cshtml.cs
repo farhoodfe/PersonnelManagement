@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using PersonnelManagement.RazorUI.DTOs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

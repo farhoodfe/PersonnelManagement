@@ -12,5 +12,6 @@ namespace PersonnelManagement.Service.DTOs
         public string? FName { get; set; } = null;
         public string? LName { get; set; }
         public string? PersonnelCode { get; set; }
+        public IEnumerable <SubmissionDTO> Submissions { get; set; }
     }
 }
