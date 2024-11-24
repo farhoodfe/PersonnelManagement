@@ -1,4 +1,6 @@
-﻿namespace PersonnelManagement.MVC.Models
+﻿using PersonnelManagement.MVC.Models.DTOs;
+
+namespace PersonnelManagement.MVC.Models
 {
     public class PersonnelViewModel
     {
@@ -6,7 +8,7 @@
         public string FName { get; set; }
         public string LName { get; set; }
         public string PersonnelCode { get; set; }
-        public Dictionary<string, string> DynamicFields { get; set; } // Key: FieldName, Value: FieldValue
+        public List<SubmissionDTO> DynamicFields { get; set; }
     }
 
 }

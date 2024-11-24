@@ -4,7 +4,7 @@
     var statusMapping = ViewBag.StatusMapping as Dictionary<int, string>;
 }
 
-<h2>Dynamic Fields</h2>
+<h2>فیدهای داینامیک</h2>
 
 <a href="@Url.Action("Create", "DynamicFields")">ایجاد فیلد جدید</a>
 
@@ -14,7 +14,7 @@
             <th>نام فیلد</th>
             <th>نام نمایشی</th>
             <th>نوع داده</th>
-            <th>عملیات</th>
+            @* <th>عملیات</th> *@
         </tr>
     </thead>
     <tbody>
@@ -24,10 +24,10 @@
                 <td>@field.fieldName</td>
                 <td>@field.displayName</td>
                 <td>@(statusMapping.ContainsKey(field.type) ? statusMapping[field.type] : "Unknown")</td>
-                <td>
+               @*  <td>
                     <a href="@Url.Action("Edit", "DynamicFields", new { id = field.id })">ویرایش</a> |
                     <a href="@Url.Action("Delete", "DynamicFields", new { id = field.id })">حذف</a>
-                </td>
+                </td> *@
             </tr>
         }
     </tbody>

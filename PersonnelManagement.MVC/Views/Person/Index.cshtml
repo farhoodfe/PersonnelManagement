@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<PersonnelViewModel>
 
-<h2>Personnel List</h2>
+<h2>لیست پرسنل</h2>
+<a href="@Url.Action("Create", "Person")">ایجاد شخص جدید</a>
 
 <table class="table">
     <thead>
@@ -9,14 +10,23 @@
             <th>نام خانوادگی</th>
             <th>کد پرسنلی</th>
             @* تولید فیلدهای داینامیک *@
-            @if (Model.Any() && Model.First().DynamicFields != null)
+            @{
+                // Collect all unique dynamic field names from the model
+                var allDynamicFieldNames = Model
+                .Where(p => p.DynamicFields != null)
+                .SelectMany(p => p.DynamicFields.Select(f => f.FieldName))
+                .Distinct()
+                .ToList();
+            }
+
+            @if (allDynamicFieldNames.Any())
             {
-                foreach (var field in Model.First().DynamicFields.Keys)
+                foreach (var field in allDynamicFieldNames)
                 {
                     <th>@field</th>
                 }
             }
-            <th>عملیات</th>
+         @*  <th>عملیات</th>*@
         </tr>
     </thead>
     <tbody>
@@ -29,12 +39,12 @@
                 @* تولید مقدار فیلدهای داینامیک *@
                 @foreach (var field in person.DynamicFields)
                 {
-                    <td>@field.Value</td>
+                    <td>@field.FieldValue</td>
                 }
-                <td>
-                    <a asp-action="Edit" asp-route-id="@person.PersonId" class="btn btn-primary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@person.PersonId" class="btn btn-danger">Delete</a>
-                </td>
+               @*  <td>
+                    <a asp-action="Edit" asp-route-id="@person.PersonId" class="btn btn-primary">ویرایش</a>
+                    <a asp-action="Delete" asp-route-id="@person.PersonId" class="btn btn-danger">حذف</a>
+                </td> *@
             </tr>
         }
     </tbody>

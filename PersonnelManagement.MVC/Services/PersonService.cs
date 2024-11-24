@@ -14,6 +14,13 @@ namespace PersonnelManagement.MVC.Services
         {
             _httpClient = httpClient;
         }
+
+        public async Task<bool> CreatePersonAsync(PersonnelData newPerson)
+        {
+            var response = await _httpClient.PostAsJsonAsync("https://localhost:7164/api/Person/CreatePerson", newPerson);
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<List<PersonnelData>> GetAllPersons()
         {
             var response = await _httpClient.GetAsync("https://localhost:7164/api/Person/GetAllPersonInfos");

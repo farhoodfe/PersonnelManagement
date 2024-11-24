@@ -2,7 +2,7 @@
 {
     public class PersonnelData
     {
-        public long? id { get; set; }
+       // public long? id { get; set; }
         public string fName { get; set; }
         public string lName { get; set; }
         public string personnelCode { get; set; }
