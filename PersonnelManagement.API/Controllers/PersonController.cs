@@ -52,5 +52,25 @@ namespace PersonnelManagement.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("[action]")]
+        public async Task<ActionResult> GetAllPersonInfos()
+        {
+            try
+            {
+                IEnumerable<PersonInfoDTO> PersonsList;
+                PersonsList = await _PersonnelService.GetAllPersonsAsync();
+
+                
+
+                return Ok(PersonsList);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+
+        }
     }
 }

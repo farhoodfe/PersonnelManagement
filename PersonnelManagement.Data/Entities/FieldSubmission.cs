@@ -30,10 +30,12 @@ namespace PersonnelManagement.Data.Entities
         public virtual DynamicFieldDefinition? fieldDefinition { get; set; }
 
         [Column("fk_PersonInfo")]
-        public long Fk_PersonInfo { get; set; }
+        public long Fk_PersonInfo { get; set; } 
 
         [ForeignKey("Fk_PersonInfo")]
         public virtual PersonInfo PersonInfo { get; set; }
+
+        
 
 
     }

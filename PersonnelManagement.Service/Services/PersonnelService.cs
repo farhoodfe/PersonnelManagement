@@ -16,14 +16,16 @@ namespace PersonnelManagement.Service.Services
     {
         private readonly IRepository<DynamicFieldDefinition> _RFieldDefinition;
         private readonly IRepository<PersonInfo> _RPersonInfo;
+        private readonly IRepository<FieldSubmission> _RFieldSubmission;
         private readonly IMapper _mapper;
 
         public PersonnelService(IMapper mapper, IRepository<DynamicFieldDefinition> RFieldDefinition,
-            IRepository<PersonInfo> RPersonInfo)
+            IRepository<PersonInfo> RPersonInfo, IRepository<FieldSubmission> RFieldSubmission)
         {
             _mapper = mapper;
             _RFieldDefinition = RFieldDefinition;
             _RPersonInfo = RPersonInfo;
+            _RFieldSubmission = RFieldSubmission;
         }
 
         public async Task<long> CreatePersonAsync(PersonInfoDTO PersonModel)
@@ -63,12 +65,33 @@ namespace PersonnelManagement.Service.Services
                 p.FName = person.FName;
                 p.LName = person.LName;
                 p.PersonnelCode = person.PersonnelCode;
-                if (person.FieldSubmissions != null)
-                    foreach (FieldSubmission sub in person.FieldSubmissions)
-                    {
-                        p.Submissions.Add(_mapper.Map<SubmissionDTO>(sub));
-                    }
+                p.Submissions =await GetPersonSubmissions(person.Id);
                 result.Add(p);
+            }
+            return result;
+        }
+
+        public async Task<ICollection<SubmissionDTO>> GetPersonSubmissions(long Id)
+        {
+            var person = _RPersonInfo.FindAsync(Id);
+            if (person == null)
+                return null;
+            List<SubmissionDTO> result = new List<SubmissionDTO>();
+            List<FieldSubmission> SubList = new List<FieldSubmission>();
+            SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id);
+            if (SubList.Count > 0)
+            {
+                SubmissionDTO sb = new SubmissionDTO();
+                foreach (FieldSubmission sub in SubList)
+                {
+                    DynamicFieldDefinition f = new DynamicFieldDefinition();
+                    f = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
+                    sb.DisplayName = f.DisplayName;
+                    sb =_mapper.Map<SubmissionDTO>(sub);
+                    
+                    result.Add(sb);
+                }
+
             }
             return result;
         }
