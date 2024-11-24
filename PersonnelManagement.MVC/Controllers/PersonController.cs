@@ -12,11 +12,11 @@ namespace PersonnelManagement.MVC.Controllers
             _PersonService = personService;
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var fields = await _PersonService.GetAllFieldsAsync();
-        //    return View(fields);
-        //}
+        public async Task<IActionResult> Index()
+        {
+            var fields = await _PersonService.GetAllPersons();
+            return View(fields);
+        }
 
         //public IActionResult Create()
         //{

@@ -12,9 +12,18 @@ public class DynamicFieldsController : Controller
         _dynamicFieldService = dynamicFieldService;
     }
 
+    private readonly Dictionary<int, string> fieldTypeMapping = new Dictionary<int, string>
+    {
+        { 0, "متن" },
+        { 1, "عدد" },
+        { 2, "تاریخ" },
+        { 3, "اعشار" }
+    };
     public async Task<IActionResult> Index()
     {
         var fields = await _dynamicFieldService.GetAllFieldsAsync();
+        ViewBag.StatusMapping = fieldTypeMapping;
+
         return View(fields);
     }
 

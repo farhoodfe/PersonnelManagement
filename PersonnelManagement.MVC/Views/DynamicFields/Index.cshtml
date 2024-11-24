@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<DynamicFieldDefinition>
+@{
+    // Retrieve the status mapping from ViewBag
+    var statusMapping = ViewBag.StatusMapping as Dictionary<int, string>;
+}
 
 <h2>Dynamic Fields</h2>
 
@@ -19,7 +23,7 @@
             <tr>
                 <td>@field.fieldName</td>
                 <td>@field.displayName</td>
-                <td>@field.type</td>
+                <td>@(statusMapping.ContainsKey(field.type) ? statusMapping[field.type] : "Unknown")</td>
                 <td>
                     <a href="@Url.Action("Edit", "DynamicFields", new { id = field.id })">ویرایش</a> |
                     <a href="@Url.Action("Delete", "DynamicFields", new { id = field.id })">حذف</a>

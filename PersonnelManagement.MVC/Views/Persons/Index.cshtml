@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PersonInfo>
+﻿@model IEnumerable<PersonnelViewModel>
 
 <h2>Persons</h2>
 
@@ -17,12 +17,12 @@
         @foreach (var person in Model)
         {
             <tr>
-                <td>@person.PersonnelCode</td>
-                <td>@person.FName</td>
-                <td>@person.LName</td>
+                <td>@person.personnelCode</td>
+                <td>@person.fName</td>
+                <td>@person.lName</td>
                 <td>
-                    <a href="@Url.Action("Edit", "Persons", new { id = person.Id })">ویرایش</a> |
-                    <a href="@Url.Action("Delete", "Persons", new { id = person.Id })">حذف</a>
+                    <a href="@Url.Action("Edit", "Persons", new { id = person.id })">ویرایش</a> |
+                    <a href="@Url.Action("Delete", "Persons", new { id = person.id })">حذف</a>
                 </td>
             </tr>
         }

@@ -2,7 +2,9 @@
 {
     public class FieldSubmission
     {
-        public long FieldId { get; set; }
-        public string? FieldValue { get; set; }
+        public long? id { get; set; }
+        public string? fieldValue { get; set; }
+        public string? displayName { get; set; }
+        public long? fk_FieldDefinition { get; set; }
     }
 }
