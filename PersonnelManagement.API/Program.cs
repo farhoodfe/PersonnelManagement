@@ -21,7 +21,9 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IFieldDefinitionService, FieldDefinitionService>();
+builder.Services.AddScoped<IPersonnelService, PersonnelService>();
 builder.Services.AddScoped<IRepository<DynamicFieldDefinition>, Repository<DynamicFieldDefinition>>();
+builder.Services.AddScoped<IRepository<PersonInfo>, Repository<PersonInfo>>();
 
 builder.Services.AddDbContext<PersonnelDBContext>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

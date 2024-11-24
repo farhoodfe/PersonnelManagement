@@ -19,6 +19,9 @@ namespace PersonnelManagement.Service
 
             CreateMap<DynamicFieldModel, NewFieldDTO>();
             CreateMap<NewFieldDTO, DynamicFieldModel>();
+
+            CreateMap<FieldSubmission, SubmissionDTO>();
+            CreateMap<SubmissionDTO, FieldSubmission>();
         }
     }
 }

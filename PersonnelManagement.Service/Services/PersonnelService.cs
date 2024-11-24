@@ -14,7 +14,7 @@ namespace PersonnelManagement.Service.Services
     public class PersonnelService : IPersonnelService
     {
         private readonly IRepository<DynamicFieldDefinition> _RFieldDefinition;
-        private readonly IRepository<PersonInfo> _RPersonIfno;
+        private readonly IRepository<PersonInfo> _RPersonInfo;
         private readonly IMapper _mapper;
 
         public PersonnelService(IMapper mapper, IRepository<DynamicFieldDefinition> RFieldDefinition,
@@ -22,25 +22,30 @@ namespace PersonnelManagement.Service.Services
         {
             _mapper = mapper;
             _RFieldDefinition = RFieldDefinition;
-            _RPersonIfno = RPersonInfo;
+            _RPersonInfo = RPersonInfo;
         }
-        public async Task<long> CreatePersonAsync(PersonInfoDTO newPerson)
+        public async Task<long> CreatePersonAsync(PersonInfoDTO PersonModel)
         {
-            if (newPerson == null) { throw new ArgumentNullException(); }
+            if (PersonModel == null) { throw new ArgumentNullException(); }
 
-            PersonInfo person= new PersonInfo();
-            person.FName = newPerson.FName;
-            person.LName = newPerson.LName;
-            person.PersonnelCode = newPerson.PersonnelCode;
+            PersonInfo newPerson= new PersonInfo();
+            newPerson.FName = PersonModel.FName;
+            newPerson.LName = PersonModel.LName;
+            newPerson.PersonnelCode = PersonModel.PersonnelCode;
+
+           
 
             List<FieldSubmission> submissions = new List<FieldSubmission>();
-            foreach (SubmissionDTO sub in newPerson.Submissions)
+            foreach (SubmissionDTO sub in PersonModel.Submissions)
             {
-                submissions.Add (_mapper.Map<FieldSubmission>(sub));
+                FieldSubmission fs = new FieldSubmission();
+                fs.Fk_FieldDefinition = sub.Fk_FieldDefinition;
+                fs.FieldValue = sub.FieldValue;
+                submissions.Add (fs);
             }
-            person.FieldSubmissions = submissions;
-            await _RPersonIfno.CreateAsync(person);
-            return (person.Id);
+            newPerson.FieldSubmissions = submissions;
+             await _RPersonInfo.CreateAsync(newPerson);
+            return (newPerson.Id);
 
         }
     }

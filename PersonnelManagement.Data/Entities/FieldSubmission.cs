@@ -24,10 +24,10 @@ namespace PersonnelManagement.Data.Entities
         public string? FieldValue { get; set; }
 
         [Column("fk_FieldDefinition")]
-        public long Fk_FieldDefinition { get; set; }
+        public long? Fk_FieldDefinition { get; set; }
 
         [ForeignKey("Fk_FieldDefinition")]
-        public virtual DynamicFieldDefinition fieldDefinition { get; set; }
+        public virtual DynamicFieldDefinition? fieldDefinition { get; set; }
 
         [Column("fk_PersonInfo")]
         public long Fk_PersonInfo { get; set; }

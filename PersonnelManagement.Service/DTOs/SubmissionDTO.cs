@@ -9,9 +9,9 @@ namespace PersonnelManagement.Service.DTOs
 {
     public class SubmissionDTO
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public string? FieldValue { get; set; }
-        public NewFieldDTO FieldDefinition { get; set; }
+        public long? Fk_FieldDefinition { get; set; }
         
     }
 }
