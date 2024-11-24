@@ -1,0 +1,41 @@
+﻿@model IEnumerable<PersonnelViewModel>
+
+<h2>Personnel List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>نام</th>
+            <th>نام خانوادگی</th>
+            <th>کد پرسنلی</th>
+            @* تولید فیلدهای داینامیک *@
+            @if (Model.Any() && Model.First().DynamicFields != null)
+            {
+                foreach (var field in Model.First().DynamicFields.Keys)
+                {
+                    <th>@field</th>
+                }
+            }
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in Model)
+        {
+            <tr>
+                <td>@person.FName</td>
+                <td>@person.LName</td>
+                <td>@person.PersonnelCode</td>
+                @* تولید مقدار فیلدهای داینامیک *@
+                @foreach (var field in person.DynamicFields)
+                {
+                    <td>@field.Value</td>
+                }
+                <td>
+                    <a asp-action="Edit" asp-route-id="@person.PersonId" class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@person.PersonId" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

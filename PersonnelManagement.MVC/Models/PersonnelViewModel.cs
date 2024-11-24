@@ -2,12 +2,11 @@
 {
     public class PersonnelViewModel
     {
-        public long? id { get; set; }
-        public string fName { get; set; }
-        public string lName { get; set; }
-        public string personnelCode { get; set; }
-        public ICollection<FieldSubmission>? submissions { get; set; }
-        //public Dictionary<string, string> DynamicFields { get; set; } // Key: FieldName, Value: FieldValue
+        public long? PersonId { get; set; }
+        public string FName { get; set; }
+        public string LName { get; set; }
+        public string PersonnelCode { get; set; }
+        public Dictionary<string, string> DynamicFields { get; set; } // Key: FieldName, Value: FieldValue
     }
 
 }

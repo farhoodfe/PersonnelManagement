@@ -1,4 +1,4 @@
-﻿using PersonnelManagement.MVC.Models;
+﻿using PersonnelManagement.MVC.Models.DTOs;
 using PersonnelManagement.MVC.Services.Contracts;
 using System.Net.Http;
 using System.Text.Json;
@@ -14,14 +14,14 @@ namespace PersonnelManagement.MVC.Services
         {
             _httpClient = httpClient;
         }
-        public async Task<List<PersonnelViewModel>> GetAllPersons()
+        public async Task<List<PersonnelData>> GetAllPersons()
         {
             var response = await _httpClient.GetAsync("https://localhost:7164/api/Person/GetAllPersonInfos");
             response.EnsureSuccessStatusCode();
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<List<PersonnelViewModel>>(jsonResponse);
-            var personnelData = await response.Content.ReadFromJsonAsync<List<PersonnelViewModel>>();
+            return JsonSerializer.Deserialize<List<PersonnelData>>(jsonResponse);
+            var personnelData = await response.Content.ReadFromJsonAsync<List<PersonnelData>>();
 
             // Map API response to ViewModel
             //var viewModel = personnelData.Select(p => new PersonnelViewModel

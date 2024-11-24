@@ -1,9 +1,9 @@
-﻿using PersonnelManagement.MVC.Models;
+﻿using PersonnelManagement.MVC.Models.DTOs;
 
 namespace PersonnelManagement.MVC.Services.Contracts
 {
     public interface IPersonService
     {
-        Task<List<PersonnelViewModel>> GetAllPersons();
+        Task<List<PersonnelData>> GetAllPersons();
     }
 }

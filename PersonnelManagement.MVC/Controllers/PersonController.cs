@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PersonnelManagement.MVC.Models.DTOs;
+using PersonnelManagement.MVC.Models;
 using PersonnelManagement.MVC.Services.Contracts;
 
 namespace PersonnelManagement.MVC.Controllers
@@ -15,7 +17,15 @@ namespace PersonnelManagement.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var fields = await _PersonService.GetAllPersons();
-            return View(fields);
+            var viewModel = fields.Select(p => new PersonnelViewModel
+            {
+                PersonId = p.id,
+                FName = p.fName,
+                LName = p.lName,
+                PersonnelCode = p.personnelCode,
+                DynamicFields = p.submissions.ToDictionary(df => df.displayName, df => df.fieldValue)
+            }).ToList();
+            return View(viewModel);
         }
 
         //public IActionResult Create()

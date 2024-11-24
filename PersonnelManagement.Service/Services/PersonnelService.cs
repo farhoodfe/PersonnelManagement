@@ -86,9 +86,10 @@ namespace PersonnelManagement.Service.Services
                 {
                     DynamicFieldDefinition f = new DynamicFieldDefinition();
                     f = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
-                    sb.DisplayName = f.DisplayName;
-                    sb =_mapper.Map<SubmissionDTO>(sub);
                     
+                    sb =_mapper.Map<SubmissionDTO>(sub);
+                    sb.DisplayName = f.DisplayName;
+
                     result.Add(sb);
                 }
 
