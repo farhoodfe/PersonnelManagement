@@ -11,6 +11,7 @@ namespace PersonnelManagement.Service.DTOs
     {
         public long? Id { get; set; }
         public string? FieldValue { get; set; }
+        public string? DisplayName { get; set; }
         public long? Fk_FieldDefinition { get; set; }
         
     }

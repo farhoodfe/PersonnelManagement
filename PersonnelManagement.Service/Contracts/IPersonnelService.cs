@@ -10,5 +10,6 @@ namespace PersonnelManagement.Service.Contracts
     public interface IPersonnelService
     {
         Task<long> CreatePersonAsync(PersonInfoDTO newPerson);
+        Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync();
     }
 }

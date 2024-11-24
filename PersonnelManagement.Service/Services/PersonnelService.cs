@@ -6,6 +6,7 @@ using PersonnelManagement.Service.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,7 @@ namespace PersonnelManagement.Service.Services
             _RFieldDefinition = RFieldDefinition;
             _RPersonInfo = RPersonInfo;
         }
+
         public async Task<long> CreatePersonAsync(PersonInfoDTO PersonModel)
         {
             if (PersonModel == null) { throw new ArgumentNullException(); }
@@ -47,6 +49,28 @@ namespace PersonnelManagement.Service.Services
              await _RPersonInfo.CreateAsync(newPerson);
             return (newPerson.Id);
 
+        }
+
+        public async Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync()
+        {
+            IEnumerable<PersonInfo> personList;
+            personList = await _RPersonInfo.GetAllAsync();
+            
+            List<PersonInfoDTO> result = new List<PersonInfoDTO> ();
+            foreach (PersonInfo person in personList)
+            {
+                PersonInfoDTO p = new PersonInfoDTO();
+                p.FName = person.FName;
+                p.LName = person.LName;
+                p.PersonnelCode = person.PersonnelCode;
+                if (person.FieldSubmissions != null)
+                    foreach (FieldSubmission sub in person.FieldSubmissions)
+                    {
+                        p.Submissions.Add(_mapper.Map<SubmissionDTO>(sub));
+                    }
+                result.Add(p);
+            }
+            return result;
         }
     }
 }
