@@ -1,0 +1,30 @@
+﻿@model IEnumerable<PersonInfo>
+
+<h2>Persons</h2>
+
+<a href="@Url.Action("Create", "Persons")">Create New Person</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>کد پرسنلی</th>
+            <th>نام</th>
+            <th>نام خانوادگی</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in Model)
+        {
+            <tr>
+                <td>@person.PersonnelCode</td>
+                <td>@person.FName</td>
+                <td>@person.LName</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Persons", new { id = person.Id })">ویرایش</a> |
+                    <a href="@Url.Action("Delete", "Persons", new { id = person.Id })">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

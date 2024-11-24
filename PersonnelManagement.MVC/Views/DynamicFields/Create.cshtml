@@ -1,0 +1,24 @@
+﻿@model DynamicFieldDefinition
+
+<h2>ایجاد فیلد جدید</h2>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>نام فیلد</label>
+        <input asp-for="fieldName" />
+    </div>
+    <div>
+        <label>نام نمایش</label>
+        <input asp-for="displayName" />
+    </div>
+    <div>
+        <label>نوع</label>
+        <select asp-for="type">
+            <option value="0">متن</option>
+            <option value="1">عدد</option>
+            <option value="2">تاریخ</option>
+            <option value="2">اعشار</option>
+        </select>
+    </div>
+    <button type="submit">ایجاد</button>
+</form>

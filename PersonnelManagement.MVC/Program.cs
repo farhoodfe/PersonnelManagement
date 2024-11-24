@@ -1,7 +1,15 @@
+using PersonnelManagement.MVC.Services;
+using PersonnelManagement.MVC.Services.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient<IDynamicFieldService, DynamicFieldService>();
+builder.Services.AddHttpClient<IPersonService, PersonService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
+builder.Services.AddScoped<IDynamicFieldService, DynamicFieldService>();
 
 var app = builder.Build();
 

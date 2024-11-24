@@ -1,0 +1,30 @@
+﻿@model IEnumerable<DynamicFieldDefinition>
+
+<h2>Dynamic Fields</h2>
+
+<a href="@Url.Action("Create", "DynamicFields")">ایجاد فیلد جدید</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>نام فیلد</th>
+            <th>نام نمایشی</th>
+            <th>نوع داده</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var field in Model)
+        {
+            <tr>
+                <td>@field.fieldName</td>
+                <td>@field.displayName</td>
+                <td>@field.type</td>
+                <td>
+                    <a href="@Url.Action("Edit", "DynamicFields", new { id = field.id })">ویرایش</a> |
+                    <a href="@Url.Action("Delete", "DynamicFields", new { id = field.id })">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
