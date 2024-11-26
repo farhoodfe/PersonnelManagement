@@ -12,6 +12,7 @@ using AutoMapper;
 using System.Net.Mail;
 using System.Net;
 using System.Text.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace PersonnelManagement.Service.Services
 {
@@ -45,11 +46,6 @@ namespace PersonnelManagement.Service.Services
             return (fd.Id);
         }
 
-        public bool DeleteField(long id)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ICollection<NewFieldDTO>> GetAllFieldsAsync(int pageSize=0, int pageNumber=1)
         {
             IEnumerable<DynamicFieldDefinition> fieldList;
@@ -67,7 +63,17 @@ namespace PersonnelManagement.Service.Services
 
         }
 
-        public int UpdateField(long id, NewFieldDTO field)
+        public async Task<NewFieldDTO> GetFieldById(long id)
+        {
+            DynamicFieldDefinition field = new DynamicFieldDefinition();
+            if (id == 0 )
+                return null;
+            field = await _RFieldDefinition.FindAsync(id);
+            return ( _mapper.Map<NewFieldDTO>(field));
+        }
+
+
+        Task<bool> IFieldDefinitionService.DeleteField(long id)
         {
             throw new NotImplementedException();
         }
