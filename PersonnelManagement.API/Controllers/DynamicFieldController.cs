@@ -70,5 +70,21 @@ namespace PersonnelManagement.API.Controllers
 
         }
 
+        [HttpGet("{id:long}", Name = "GetProductById")]
+        public async Task<IActionResult> GetFieldById(long id)
+        {
+            try
+            {
+                NewFieldDTO field = new NewFieldDTO();
+                DynamicFieldModel ResultField = new DynamicFieldModel();
+                field = await _FieldDefService.GetFieldById(id);
+                ResultField = _mapper.Map<DynamicFieldModel>(field);
+                return Ok(ResultField);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }
