@@ -70,7 +70,7 @@ namespace PersonnelManagement.API.Controllers
 
         }
 
-        [HttpGet("{id:long}", Name = "GetProductById")]
+        [HttpGet("{id:long}", Name = "GetFieldById")]
         public async Task<IActionResult> GetFieldById(long id)
         {
             try

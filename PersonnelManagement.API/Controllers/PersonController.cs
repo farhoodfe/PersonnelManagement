@@ -72,5 +72,31 @@ namespace PersonnelManagement.API.Controllers
             }
 
         }
+
+        [HttpGet("{id:long}", Name = "GetPersonById")]
+        public async Task<IActionResult> GetPersonById(long id)
+        {
+            try
+            {
+                PersonInfoModel person = new PersonInfoModel();
+                PersonInfoDTO p = new PersonInfoDTO();
+                p = await _PersonnelService.GetPersonById(id);
+                person.FName = p.FName;
+                person.LName = p.LName;
+                person.PersonnelCode = p.PersonnelCode;
+                List<SubmissionModel> subs = new List<SubmissionModel>();
+                if (p.Submissions!= null )
+                    foreach (var sub in p.Submissions)
+                    {
+                        subs.Add(_mapper.Map<SubmissionModel>(sub));
+                    }
+                person.Submissions = subs;
+                return Ok(person);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }
