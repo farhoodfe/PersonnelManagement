@@ -53,10 +53,7 @@ namespace PersonnelManagement.Service.Services
 
         }
 
-        public Task<bool> DeleteField(long Id)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public async Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync()
         {

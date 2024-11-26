@@ -86,5 +86,20 @@ namespace PersonnelManagement.API.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> DeleteField([FromQuery] int Id)
+        {
+            try
+            {
+                if (await _FieldDefService.DeleteField(Id));
+                    return Ok("فیلد با موفقیت حذف شد");
+                return BadRequest("خظا");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

@@ -73,9 +73,24 @@ namespace PersonnelManagement.Service.Services
         }
 
 
-        Task<bool> IFieldDefinitionService.DeleteField(long id)
+        public async Task<bool> DeleteField(long Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                DynamicFieldDefinition field = new DynamicFieldDefinition();
+                field = await _RFieldDefinition.FindAsync(Id);
+                if (field != null)
+                {
+                    field.IsDeleted = true;
+                }
+                await _RFieldDefinition.UpdateAsync(field);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
     }
 }
