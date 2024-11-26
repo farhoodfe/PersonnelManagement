@@ -5,6 +5,7 @@ using PersonnelManagement.Service.Contracts;
 using PersonnelManagement.Service.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -71,6 +72,27 @@ namespace PersonnelManagement.Service.Services
                 result.Add(p);
             }
             return result;
+        }
+
+        public async Task<PersonInfoDTO> GetPersonById(long Id)
+        {
+            if (Id>0)
+            {
+                PersonInfo person = await _RPersonInfo.FindAsync(Id);
+                PersonInfoDTO resultPerson = new PersonInfoDTO();
+                if (person != null)
+                {
+                    resultPerson.Id = person.Id;
+                    resultPerson.FName = person.FName;
+                    resultPerson.LName = person.LName;
+                    resultPerson.PersonnelCode=person.PersonnelCode;
+                    //Getting Submissions List
+                    resultPerson.Submissions = await GetPersonSubmissions(person.Id);
+                    return resultPerson;
+                }
+                
+            }
+            return null;
         }
 
         public async Task<ICollection<SubmissionDTO>> GetPersonSubmissions(long Id)

@@ -11,6 +11,7 @@ namespace PersonnelManagement.Service.Contracts
     {
         Task<long> CreatePersonAsync(PersonInfoDTO newPerson);
         Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync();
+        Task<PersonInfoDTO> GetPersonById(long Id);
         Task<ICollection<SubmissionDTO>> GetPersonSubmissions(long Id);
     }
 }
