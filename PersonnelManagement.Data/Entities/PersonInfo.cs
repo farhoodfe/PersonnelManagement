@@ -24,18 +24,18 @@ namespace PersonnelManagement.Data.Entities
 
         [Column("FName")]
         [DefaultValue(" ")]
-        public string? FName { get; set; }
+        public string FName { get; set; }
 
         [Column("LName")]
         [DefaultValue(" ")]
-        public string? LName { get; set; }
+        public string LName { get; set; }
 
         [Column("PersonnelCode")]
         [DefaultValue(" ")]
-        public string? PersonnelCode { get; set; }
+        public string PersonnelCode { get; set; }
 
         [Column("IsDeleted")]
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
         #endregion
 
         #region ForeignKeys

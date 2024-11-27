@@ -15,6 +15,6 @@ namespace PersonnelManagement.Service.Contracts
         Task<PersonInfoDTO> UpdatePerson(long Id, PersonInfoDTO person);
         Task<ICollection<SubmissionDTO>> GetPersonSubmissions(long Id);
 
-        Task<SubmissionDTO> GetSubmissionById(long? Id);
+        //Task<SubmissionDTO> GetSubmissionByFieldId(long? FieldId);
     }
 }

@@ -37,7 +37,7 @@ namespace PersonnelManagement.Service.Services
             newPerson.FName = PersonModel.FName;
             newPerson.LName = PersonModel.LName;
             newPerson.PersonnelCode = PersonModel.PersonnelCode;
-
+            newPerson.IsDeleted = false;
            
 
             List<FieldSubmission> submissions = new List<FieldSubmission>();
@@ -46,6 +46,7 @@ namespace PersonnelManagement.Service.Services
                 FieldSubmission fs = new FieldSubmission();
                 fs.Fk_FieldDefinition = sub.Fk_FieldDefinition;
                 fs.FieldValue = sub.FieldValue;
+                fs.IsDeleted = false;
                 submissions.Add (fs);
             }
             newPerson.FieldSubmissions = submissions;
@@ -59,7 +60,7 @@ namespace PersonnelManagement.Service.Services
         public async Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync()
         {
             IEnumerable<PersonInfo> personList;
-            personList = await _RPersonInfo.GetAllAsync();
+            personList = await _RPersonInfo.GetAllAsync(u => u.IsDeleted==false);
             
             List<PersonInfoDTO> result = new List<PersonInfoDTO> ();
             foreach (PersonInfo person in personList)
@@ -102,7 +103,7 @@ namespace PersonnelManagement.Service.Services
                 return null;
             List<SubmissionDTO> result = new List<SubmissionDTO>();
             List<FieldSubmission> SubList = new List<FieldSubmission>();
-            SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id);
+            SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id && u.IsDeleted == false);
             if (SubList.Count > 0)
             {
                 SubmissionDTO sb = new SubmissionDTO();
@@ -135,9 +136,11 @@ namespace PersonnelManagement.Service.Services
                 {
                     foreach(var sub in updateDTO.Submissions)
                     { 
-                        SubmissionDTO s = await GetSubmissionById(sub.Id);  
-                        s.FieldValue = sub.FieldValue;
-                        person.FieldSubmissions.Add(_mapper.Map<FieldSubmission>(s));
+                        FieldSubmission fs = new FieldSubmission();
+                        fs = await _RFieldSubmission.GetAsync(u => u.Fk_FieldDefinition == sub.Fk_FieldDefinition
+                                && (u.IsDeleted == false || u.IsDeleted == null));
+                        fs.FieldValue = sub.FieldValue;
+                        person.FieldSubmissions.Add(fs);
                     }
                 }
                 await _RPersonInfo.UpdateAsync(person);
@@ -148,11 +151,12 @@ namespace PersonnelManagement.Service.Services
 
         }
 
-        public async Task<SubmissionDTO> GetSubmissionById(long? Id)
-        {
-            FieldSubmission f = new FieldSubmission();
-            f =await _RFieldSubmission.FindAsync(Id);
-            return (_mapper.Map<SubmissionDTO>(f));
-        }
+        //public async Task<SubmissionDTO> GetSubmissionByFieldId(long? FieldId)
+        //{
+        //    FieldSubmission f = new FieldSubmission();
+        //    f = await _RFieldSubmission.GetAsync(u => u.Fk_FieldDefinition == FieldId 
+        //                        && (u.IsDeleted == false || u.IsDeleted ==null) );
+        //    return (_mapper.Map<SubmissionDTO>(f));
+        //}
     }
 }
