@@ -58,6 +58,36 @@ namespace PersonnelManagement.Data.Repository
         {
             return await dbSet.FindAsync(Id);
         }
+
+        public async Task<IEnumerable<T>> GetFilteredAsync(List<Expression<Func<T, bool>>> Filter, Func<IQueryable<T>, IOrderedQueryable<T>> OrderBy = null, string Properties = "")
+        {
+            IQueryable<T> Query = dbSet;
+
+            if (Filter != null)
+            {
+                foreach (var f in Filter)
+                {
+                    Query = Query.Where(f);
+                }
+            }
+
+            if (Properties != null)
+            {
+                foreach (var item in Properties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    Query = Query.Include(item);
+                }
+            }
+
+            if (OrderBy != null)
+            {
+                return await OrderBy(Query).ToListAsync();
+            }
+            else
+            {
+                return await Query.ToListAsync();
+            }
+        }
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null,
             int pageSize = 0, int pageNumber = 1)
         {

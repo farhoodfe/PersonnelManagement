@@ -12,7 +12,7 @@ namespace PersonnelManagement.Data.Repository.Contract
         Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null,
             int pageSize = 0, int pageNumber = 1);
         Task<T> GetAsync(Expression<Func<T, bool>> filter = null, bool tracked = true, string? includeProperties = null);
-
+        Task<IEnumerable<T>> GetFilteredAsync(List<Expression<Func<T, bool>>> Filter, Func<IQueryable<T>, IOrderedQueryable<T>> OrderBy = null, string Properties = "");
         Task<T> FindAsync(object Id);
         Task<T> UpdateAsync(T entity);
         Task CreateAsync(T entity);

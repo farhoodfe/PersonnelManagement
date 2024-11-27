@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using PersonnelManagement.Data.Entities;
 using PersonnelManagement.Data.Repository.Contract;
+using PersonnelManagement.Data.Statics;
 using PersonnelManagement.Service.Contracts;
 using PersonnelManagement.Service.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
@@ -167,5 +169,76 @@ namespace PersonnelManagement.Service.Services
                 return false;
             }
         }
+
+        public async Task<ICollection<PersonInfoDTO>> GetFilteredPersons(PersonInfoDTO personFilterDTO)
+        {
+            try
+            {
+                var filters = new List<Expression<Func<PersonInfo, bool>>>();
+
+                // Static field filters
+                if (!string.IsNullOrEmpty(personFilterDTO.FName))
+                {
+                    filters.Add(p => p.FName.Contains(personFilterDTO.FName));
+                }
+
+                if (!string.IsNullOrEmpty(personFilterDTO.LName))
+                {
+                    filters.Add(p => p.LName.Contains(personFilterDTO.LName));
+                }
+
+                if (!string.IsNullOrEmpty(personFilterDTO.PersonnelCode))
+                {
+                    filters.Add(p => p.PersonnelCode.Contains(personFilterDTO.PersonnelCode));
+                }
+
+                // Fetch filtered persons (static fields only)
+                var persons = await _RPersonInfo.GetFilteredAsync(filters);
+
+                // Dynamic field filters
+                if (personFilterDTO.Submissions != null && personFilterDTO.Submissions.Any())
+                {
+                    // Filter submissions related to the persons we already fetched
+                    var personIds = persons.Select(p => p.Id).ToList();
+
+                    var submissionFilters = personFilterDTO.Submissions.Select(filter =>
+                        (Expression<Func<FieldSubmission, bool>>)(fs =>
+                            personIds.Contains(fs.Fk_PersonInfo) &&
+                            fs.Fk_FieldDefinition == filter.Fk_FieldDefinition &&
+                            (
+                             ((int)fs.fieldDefinition.Type == 0 && fs.FieldValue.Contains(filter.FieldValue)) ||
+                             ((int)fs.fieldDefinition.Type == 1 && fs.FieldValue == filter.FieldValue) ||
+                             ((int)fs.fieldDefinition.Type == 2 && fs.FieldValue == filter.FieldValue))
+                        )
+                    ).ToList();
+
+                    // Combine all dynamic field filters
+                    var submissions = await _RFieldSubmission.GetFilteredAsync(submissionFilters);
+
+                    // Refine persons based on submissions
+                    var matchedPersonIds = submissions.Select(s => s.Fk_PersonInfo).Distinct().ToList();
+                    persons = persons.Where(p => matchedPersonIds.Contains(p.Id)).ToList();
+                }
+
+                // Convert PersonInfo to PersonInfoDTO
+                var result = persons.Select(p => new PersonInfoDTO
+                {
+                    Id = p.Id,
+                    FName = p.FName,
+                    LName = p.LName,
+                    PersonnelCode = p.PersonnelCode,
+                    Submissions = (ICollection<SubmissionDTO>)p.FieldSubmissions.ToDictionary(
+                        fs => fs.Fk_FieldDefinition,
+                        fs => fs.FieldValue)
+                }).ToList();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("خطا", ex);
+            }
+        }
+
     }
 }

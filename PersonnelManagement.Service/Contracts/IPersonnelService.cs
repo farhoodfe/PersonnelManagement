@@ -15,5 +15,6 @@ namespace PersonnelManagement.Service.Contracts
         Task<PersonInfoDTO> UpdatePerson(long Id, PersonInfoDTO person);
         Task<ICollection<SubmissionDTO>> GetPersonSubmissions(long Id);
         Task<bool> DeletePerson(long id);
+        Task<ICollection<PersonInfoDTO>> GetFilteredPersons(PersonInfoDTO person);
     }
 }
