@@ -22,6 +22,12 @@ namespace PersonnelManagement.Service
 
             CreateMap<FieldSubmission, SubmissionDTO>();
             CreateMap<SubmissionDTO, FieldSubmission>();
+
+            CreateMap<SubmissionDTO, SubmissionModel>()
+                .ForMember(dest => dest.FieldId, opt => opt.MapFrom(src => src.Fk_FieldDefinition ?? 0));
+            CreateMap<SubmissionModel, SubmissionDTO>()
+                .ForMember(dest => dest.Fk_FieldDefinition, opt => opt.MapFrom(src => (long?)src.FieldId));
+
         }
     }
 }

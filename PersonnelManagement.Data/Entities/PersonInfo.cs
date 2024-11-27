@@ -33,6 +33,9 @@ namespace PersonnelManagement.Data.Entities
         [Column("PersonnelCode")]
         [DefaultValue(" ")]
         public string? PersonnelCode { get; set; }
+
+        [Column("IsDeleted")]
+        public bool IsDeleted { get; set; }
         #endregion
 
         #region ForeignKeys

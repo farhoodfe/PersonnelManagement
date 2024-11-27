@@ -23,6 +23,9 @@ namespace PersonnelManagement.Data.Entities
         [Column("FieldValue")]
         public string? FieldValue { get; set; }
 
+        [Column("IsDeleted")]
+        public bool IsDeleted{ get; set; }
+
         [Column("fk_FieldDefinition")]
         public long? Fk_FieldDefinition { get; set; }
 

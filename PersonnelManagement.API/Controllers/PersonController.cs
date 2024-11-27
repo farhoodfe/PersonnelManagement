@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PersonnelManagement.API.Models;
 using PersonnelManagement.Service.Contracts;
 using PersonnelManagement.Service.DTOs;
+using System.Net.WebSockets;
 
 namespace PersonnelManagement.API.Controllers
 {
@@ -81,6 +82,7 @@ namespace PersonnelManagement.API.Controllers
                 PersonInfoModel person = new PersonInfoModel();
                 PersonInfoDTO p = new PersonInfoDTO();
                 p = await _PersonnelService.GetPersonById(id);
+                person.Id = p.Id;
                 person.FName = p.FName;
                 person.LName = p.LName;
                 person.PersonnelCode = p.PersonnelCode;
@@ -96,6 +98,35 @@ namespace PersonnelManagement.API.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.ToString());
+            }
+        }
+
+        [HttpPut("{id:int}", Name = "UpdateProduct")]
+        public async Task<ActionResult> UpdatePerson(long id, [FromBody] PersonInfoModel updateDTO)
+        {
+            try
+            {
+                if (updateDTO == null )
+                {
+                    return BadRequest();
+                }
+                PersonInfoDTO person = new PersonInfoDTO();
+                person.Id = id;
+                person.FName=updateDTO.FName;
+                person.LName=updateDTO.LName;
+                person.PersonnelCode=updateDTO.PersonnelCode;
+                person.Submissions = new List<SubmissionDTO>();
+                if (updateDTO.Submissions!= null )
+                {
+                    foreach (var sub in updateDTO.Submissions)
+                        person.Submissions.Add(_mapper.Map<SubmissionDTO>(sub));
+                }
+                await _PersonnelService.UpdatePerson(id,person);
+                return Ok("شخص با موفقیت بروز گردید");
+            }
+            catch(Exception ex) 
+            {
+                return BadRequest(ex.ToString() );
             }
         }
     }

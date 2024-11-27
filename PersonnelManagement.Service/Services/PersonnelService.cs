@@ -120,5 +120,39 @@ namespace PersonnelManagement.Service.Services
             }
             return result;
         }
+
+        public async Task<PersonInfoDTO> UpdatePerson(long Id, PersonInfoDTO updateDTO)
+        {
+            PersonInfo person = await _RPersonInfo.FindAsync(Id);
+            if (person != null)
+            {
+                person.Id = Id;
+                person.FName = updateDTO.FName;
+                person.LName = updateDTO.LName;
+                person.PersonnelCode = updateDTO.PersonnelCode;
+                person.FieldSubmissions = new List<FieldSubmission>();
+                if (updateDTO.Submissions!= null)
+                {
+                    foreach(var sub in updateDTO.Submissions)
+                    { 
+                        SubmissionDTO s = await GetSubmissionById(sub.Id);  
+                        s.FieldValue = sub.FieldValue;
+                        person.FieldSubmissions.Add(_mapper.Map<FieldSubmission>(s));
+                    }
+                }
+                await _RPersonInfo.UpdateAsync(person);
+                return updateDTO;
+            }
+            return null;
+
+
+        }
+
+        public async Task<SubmissionDTO> GetSubmissionById(long? Id)
+        {
+            FieldSubmission f = new FieldSubmission();
+            f =await _RFieldSubmission.FindAsync(Id);
+            return (_mapper.Map<SubmissionDTO>(f));
+        }
     }
 }
