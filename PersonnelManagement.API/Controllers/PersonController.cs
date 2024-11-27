@@ -146,9 +146,33 @@ namespace PersonnelManagement.API.Controllers
         }
 
         [HttpPut("[action]")]
-        public async Task<IActionResult> GetFilteredPersons([FromBody] int Id)
+        public async Task<IActionResult> GetFilteredPersons([FromBody] PersonInfoModel personFilter)
         {
+            try
+            {
+                if (personFilter == null)
+                {
+                    return BadRequest();
+                }
+                PersonInfoDTO person = new PersonInfoDTO();
+                person.FName = personFilter.FName;
+                person.LName = personFilter.LName;
+                person.PersonnelCode = personFilter.PersonnelCode;
+                person.Submissions = new List<SubmissionDTO>();
+                if (personFilter.Submissions != null)
+                {
+                    foreach (var sub in personFilter.Submissions)
+                        person.Submissions.Add(_mapper.Map<SubmissionDTO>(sub));
+                }
 
+                List<PersonInfoDTO> personList = new List<PersonInfoDTO>();
+                personList = (List<PersonInfoDTO>)await _PersonnelService.GetFilteredPersons(person);
+                return Ok(personList);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
         }
 
     }
