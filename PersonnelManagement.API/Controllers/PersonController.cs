@@ -129,5 +129,20 @@ namespace PersonnelManagement.API.Controllers
                 return BadRequest(ex.ToString() );
             }
         }
+
+        [HttpPut("[action]")]
+        public async Task<IActionResult> DeletePerson([FromQuery] int Id)
+        {
+            try
+            {
+                if (await _PersonnelService.DeletePerson(Id)) ;
+                return Ok("شخص با موفقیت حذف شد");
+               
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }

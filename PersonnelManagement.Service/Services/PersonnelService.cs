@@ -55,8 +55,6 @@ namespace PersonnelManagement.Service.Services
 
         }
 
-        
-
         public async Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync()
         {
             IEnumerable<PersonInfo> personList;
@@ -151,12 +149,23 @@ namespace PersonnelManagement.Service.Services
 
         }
 
-        //public async Task<SubmissionDTO> GetSubmissionByFieldId(long? FieldId)
-        //{
-        //    FieldSubmission f = new FieldSubmission();
-        //    f = await _RFieldSubmission.GetAsync(u => u.Fk_FieldDefinition == FieldId 
-        //                        && (u.IsDeleted == false || u.IsDeleted ==null) );
-        //    return (_mapper.Map<SubmissionDTO>(f));
-        //}
+        public async Task<bool> DeletePerson(long id)
+        {
+            try
+            {
+                PersonInfo person = new PersonInfo();
+                person = await _RPersonInfo.FindAsync(id);
+                if (person != null)
+                {
+                    person.IsDeleted = true;
+                }
+                await _RPersonInfo.UpdateAsync(person);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }
