@@ -18,6 +18,7 @@ namespace PersonnelManagement.Data
         public DbSet<DynamicFieldDefinition> Fields { get; set; }
         public DbSet<FieldSubmission> Submissions { get; set; }
         public DbSet<PersonInfo> PersonInfos { get; set; }
+        public DbSet<Formula> Formulas { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

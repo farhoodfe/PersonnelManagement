@@ -28,6 +28,8 @@ namespace PersonnelManagement.Service
             CreateMap<SubmissionModel, SubmissionDTO>()
                 .ForMember(dest => dest.Fk_FieldDefinition, opt => opt.MapFrom(src => (long?)src.FieldId));
 
+            CreateMap<Formula, FormulaDTO>();
+            CreateMap<FormulaDTO, Formula>();
         }
     }
 }
