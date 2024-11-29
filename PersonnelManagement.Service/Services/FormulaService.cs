@@ -34,5 +34,39 @@ namespace PersonnelManagement.Service.Services
             await _RFormula.CreateAsync(formula);
             return (formula.Id);
         }
+
+        /// <summary>
+        /// متد محسابه فرمول در زمان اجرا
+        /// </summary>
+        /// <param name="formula"></param>
+        /// <param name="fieldValues"></param>
+        /// <returns></returns>
+        private string CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues)
+        {
+            try
+            {
+                // Create a dictionary for field values
+                var fieldDict = fieldValues.ToDictionary(fv => fv.FieldId, fv => fv.Value);
+
+                // Replace field placeholders with actual values
+                foreach (var field in fieldDict)
+                {
+                    formula = formula.Replace($"{{Field{field.Key}}}", field.Value ?? "0");
+                }
+
+                // محسابه فرمول بر اساس عملیات ریاضی پایه
+                var dataTable = new System.Data.DataTable();
+                var result = dataTable.Compute(formula, string.Empty);
+
+                return result.ToString();
+            }
+            catch (Exception ex)
+            {
+                // Handle error  
+                Console.WriteLine($"Error calculating formula: {ex.Message}");
+                return null; // Return null in case of error
+            }
+        }
+
     }
 }

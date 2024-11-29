@@ -10,5 +10,6 @@ namespace PersonnelManagement.Service.Contracts
     public interface IFormulaService
     {
         Task<long> CreateFormulaAsync(FormulaDTO formulaDTO);
+        string CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues);
     }
 }
