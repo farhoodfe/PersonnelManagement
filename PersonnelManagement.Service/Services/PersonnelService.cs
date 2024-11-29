@@ -111,12 +111,13 @@ namespace PersonnelManagement.Service.Services
                 {
                     DynamicFieldDefinition f = new DynamicFieldDefinition();
                     f = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
-                    
-                    sb =_mapper.Map<SubmissionDTO>(sub);
-                    sb.DisplayName = f.DisplayName;
+                    if (f.IsDeleted == false)
+                    {
+                        sb = _mapper.Map<SubmissionDTO>(sub);
+                        sb.DisplayName = f.DisplayName;
 
-                    result.Add(sb);
-                }
+                        result.Add(sb);
+                    }                }
 
             }
             return result;
@@ -175,6 +176,7 @@ namespace PersonnelManagement.Service.Services
             try
             {
                 var filters = new List<Expression<Func<PersonInfo, bool>>>();
+                var submissionFilters = new List<Expression<Func<FieldSubmission, bool>>>();
 
                 // Static field filters
                 if (!string.IsNullOrEmpty(personFilterDTO.FName))
@@ -191,28 +193,39 @@ namespace PersonnelManagement.Service.Services
                 {
                     filters.Add(p => p.PersonnelCode.Contains(personFilterDTO.PersonnelCode));
                 }
+               
 
-                // Fetch filtered persons (static fields only)
-                var persons = await _RPersonInfo.GetFilteredAsync(filters);
-
-                // Dynamic field filters
-                if (personFilterDTO.Submissions != null && personFilterDTO.Submissions.Any())
+                // Fetch filtered persons based on static fields
+                List<PersonInfo> persons = (List<PersonInfo>)await _RPersonInfo.GetFilteredAsync(filters);
+                persons = persons.Where(p => p.IsDeleted == false).ToList();
+                foreach (PersonInfo person in persons)
                 {
-                    // Filter submissions related to the persons we already fetched
-                    var personIds = persons.Select(p => p.Id).ToList();
+                    List<SubmissionDTO> subs = (List<SubmissionDTO>)await GetPersonSubmissions(person.Id);
+                    foreach (SubmissionDTO submission in subs)
+                        person.FieldSubmissions.Add(_mapper.Map<FieldSubmission>(submission));
+                }
+               
+                //Dynamic Fields Filter
+                var personIds = persons.Select(p => p.Id).ToList();
 
-                    var submissionFilters = personFilterDTO.Submissions.Select(filter =>
-                        (Expression<Func<FieldSubmission, bool>>)(fs =>
+                foreach (var filter in personFilterDTO.Submissions)
+                {
+                    if (!string.IsNullOrEmpty(filter.FieldValue)) // Skip submissions without a value
+                    {
+                        submissionFilters.Add(fs =>
                             personIds.Contains(fs.Fk_PersonInfo) &&
                             fs.Fk_FieldDefinition == filter.Fk_FieldDefinition &&
                             (
-                             ((int)fs.fieldDefinition.Type == 0 && fs.FieldValue.Contains(filter.FieldValue)) ||
-                             ((int)fs.fieldDefinition.Type == 1 && fs.FieldValue == filter.FieldValue) ||
-                             ((int)fs.fieldDefinition.Type == 2 && fs.FieldValue == filter.FieldValue))
-                        )
-                    ).ToList();
-
-                    // Combine all dynamic field filters
+                                ((int)fs.fieldDefinition.Type == 0 && fs.FieldValue.Contains(filter.FieldValue)) ||
+                                ((int)fs.fieldDefinition.Type == 1 && fs.FieldValue.Contains(filter.FieldValue)) ||
+                                ((int)fs.fieldDefinition.Type == 2 && fs.FieldValue == filter.FieldValue)
+                            )
+                        );
+                    }
+                }
+                if (submissionFilters.Any())
+                {
+                    // Apply dynamic field filters only if there are any
                     var submissions = await _RFieldSubmission.GetFilteredAsync(submissionFilters);
 
                     // Refine persons based on submissions
@@ -220,23 +233,23 @@ namespace PersonnelManagement.Service.Services
                     persons = persons.Where(p => matchedPersonIds.Contains(p.Id)).ToList();
                 }
 
-                // Convert PersonInfo to PersonInfoDTO
-                var result = persons.Select(p => new PersonInfoDTO
+                List<PersonInfoDTO> result = new List<PersonInfoDTO>();
+                foreach (PersonInfo person in persons)
                 {
-                    Id = p.Id,
-                    FName = p.FName,
-                    LName = p.LName,
-                    PersonnelCode = p.PersonnelCode,
-                    Submissions = (ICollection<SubmissionDTO>)p.FieldSubmissions.ToDictionary(
-                        fs => fs.Fk_FieldDefinition,
-                        fs => fs.FieldValue)
-                }).ToList();
-
+                    PersonInfoDTO p = new PersonInfoDTO();
+                    p.FName = person.FName;
+                    p.LName = person.LName;
+                    p.PersonnelCode = person.PersonnelCode;
+                    p.Submissions = await GetPersonSubmissions(person.Id);
+                    result.Add(p);
+                }
                 return result;
             }
+
+
             catch (Exception ex)
             {
-                throw new Exception("خطا", ex);
+                throw new Exception( ex.ToString());
             }
         }
 

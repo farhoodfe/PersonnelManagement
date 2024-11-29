@@ -14,10 +14,12 @@ namespace PersonnelManagement.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPersonnelService _PersonnelService;
-        public PersonController(IMapper mapper, IPersonnelService personnelService)
+        private readonly IFieldDefinitionService _FieldService;
+        public PersonController(IMapper mapper, IPersonnelService personnelService, IFieldDefinitionService fieldDefinitionService)
         {
             _mapper = mapper;
             _PersonnelService = personnelService;
+            _FieldService = fieldDefinitionService;
         }
 
         [HttpPost("[action]")]
@@ -145,7 +147,7 @@ namespace PersonnelManagement.API.Controllers
             }
         }
 
-        [HttpPut("[action]")]
+        [HttpGet("[action]")]
         public async Task<IActionResult> GetFilteredPersons([FromBody] PersonInfoModel personFilter)
         {
             try
@@ -159,11 +161,25 @@ namespace PersonnelManagement.API.Controllers
                 person.LName = personFilter.LName;
                 person.PersonnelCode = personFilter.PersonnelCode;
                 person.Submissions = new List<SubmissionDTO>();
-                if (personFilter.Submissions != null)
+                foreach (var sub in personFilter.Submissions)
                 {
-                    foreach (var sub in personFilter.Submissions)
-                        person.Submissions.Add(_mapper.Map<SubmissionDTO>(sub));
+                    if (sub.FieldId>0)
+                        person.Submissions.Add( _mapper.Map<SubmissionDTO>(sub));
                 }
+                //if (personFilter.Submissions != null)
+                //{
+                //    foreach (var sub in personFilter.Submissions)
+                //        person.Submissions.Add(_mapper.Map<SubmissionDTO>(sub));
+                //}
+
+                //var allFields = (List<NewFieldDTO>)await _FieldService.GetAllFieldsAsync(0, 1);
+                //var fieldIds = person.Submissions.Where(s => s.Fk_FieldDefinition>0).Select(s => s.Fk_FieldDefinition).ToList();
+                //foreach (var field in allFields)
+                //{
+                //    if (!fieldIds.Contains(field.Id))
+                //        person.Submissions.Add(new SubmissionDTO { Fk_FieldDefinition = field.Id, FieldValue = "", DisplayName = "" });
+                //}
+                
 
                 List<PersonInfoDTO> personList = new List<PersonInfoDTO>();
                 personList = (List<PersonInfoDTO>)await _PersonnelService.GetFilteredPersons(person);
