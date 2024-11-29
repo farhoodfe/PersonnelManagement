@@ -30,6 +30,9 @@ namespace PersonnelManagement.Service
 
             CreateMap<Formula, FormulaDTO>();
             CreateMap<FormulaDTO, Formula>();
+
+            CreateMap<FormulaModel, FormulaDTO>();
+            CreateMap<FormulaDTO, FormulaModel>();
         }
     }
 }
