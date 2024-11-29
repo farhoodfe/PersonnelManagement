@@ -41,7 +41,7 @@ namespace PersonnelManagement.Service.Services
         /// <param name="formula"></param>
         /// <param name="fieldValues"></param>
         /// <returns></returns>
-        private string CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues)
+        public string CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues)
         {
             try
             {
@@ -68,5 +68,20 @@ namespace PersonnelManagement.Service.Services
             }
         }
 
+        public async Task<List<FormulaDTO>> GetAllFormulasAsync()
+        {
+            IEnumerable<Formula> fList;
+            fList = await _RFormula.GetAllAsync(u => u.IsActive|| u.IsActive== null);
+
+            List<FormulaDTO> formulas= new List<FormulaDTO>();
+
+            foreach (Formula f in fList)
+            {
+                formulas.Add(_mapper.Map<FormulaDTO>(f));
+            }
+
+            return formulas;
+
+        }
     }
 }

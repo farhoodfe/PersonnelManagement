@@ -103,7 +103,7 @@ namespace PersonnelManagement.Service.Services
                 return null;
             List<SubmissionDTO> result = new List<SubmissionDTO>();
             List<FieldSubmission> SubList = new List<FieldSubmission>();
-            SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id && u.IsDeleted == false);
+            SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id && (u.IsDeleted == null || u.IsDeleted==false));
             if (SubList.Count > 0)
             {
                 SubmissionDTO sb = new SubmissionDTO();
@@ -111,7 +111,7 @@ namespace PersonnelManagement.Service.Services
                 {
                     DynamicFieldDefinition f = new DynamicFieldDefinition();
                     f = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
-                    if (f.IsDeleted == false)
+                    if (f.IsDeleted == false|| f.IsDeleted==null)
                     {
                         sb = _mapper.Map<SubmissionDTO>(sub);
                         sb.DisplayName = f.DisplayName;

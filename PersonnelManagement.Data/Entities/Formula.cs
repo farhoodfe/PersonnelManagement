@@ -27,6 +27,10 @@ namespace PersonnelManagement.Data.Entities
         [DefaultValue(" ")]
         public string FormulaText { get; set; } = "";
 
+        [Column("IsActive")]
+        [DefaultValue(true)]
+        public bool IsActive { get; set; } = true;
+
     }
 
 }

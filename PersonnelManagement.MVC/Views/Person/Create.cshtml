@@ -25,7 +25,7 @@
     {
         <div class="form-group">
             <label for="@field.FieldName">@field.FieldName</label>
-            <input type="text" class="form-control" id="@field.FieldName" name="DynamicFields[@index].FieldValue" value="@field.FieldValue" />
+            <input type="@field.InputType" class="form-control" id="@field.FieldName" name="DynamicFields[@index].FieldValue" value="@field.FieldValue" />
 
             @* Include FieldId and FieldName as hidden inputs *@
             <input type="hidden" name="DynamicFields[@index].FieldId" value="@field.FieldId" />

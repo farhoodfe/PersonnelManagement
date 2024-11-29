@@ -52,7 +52,8 @@ namespace PersonnelManagement.MVC.Controllers
                 {
                     FieldId = df.id,  // Store the FieldId
                     FieldName = df.displayName,
-                    FieldValue = string.Empty
+                    FieldValue = string.Empty,
+                    FieldType = df.type
                 }).ToList()
             };
 
@@ -74,7 +75,7 @@ namespace PersonnelManagement.MVC.Controllers
                     {
                         fieldId = df.FieldId,   // Include FieldId here
                         //displayName = df.FieldName,
-                        fieldValue = df.FieldValue
+                        fieldValue = (df.FieldValue!=null)? df.FieldValue.ToString():null
                     }).ToList() 
                 };
 

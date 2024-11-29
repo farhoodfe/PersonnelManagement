@@ -10,7 +10,7 @@ namespace PersonnelManagement.Data.Statics
     {
         public enum FieldType
         {
-            STRING,  //0
+            text,  //0
             INT,
             DATE,
             DOUBLE   //3
