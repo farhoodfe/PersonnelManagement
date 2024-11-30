@@ -10,10 +10,10 @@ namespace PersonnelManagement.Data
 {
     public class PersonnelDBContext : DbContext
     {
-        //public PersonnelDBContext(DbContextOptions<PersonnelDBContext> options) : base(options)
-        //{
-            
-        //}
+        public PersonnelDBContext(DbContextOptions<PersonnelDBContext> options) : base(options)
+        {
+
+        }
 
         public DbSet<DynamicFieldDefinition> Fields { get; set; }
         public DbSet<FieldSubmission> Submissions { get; set; }

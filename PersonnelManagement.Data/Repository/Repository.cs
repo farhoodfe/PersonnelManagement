@@ -51,7 +51,7 @@ namespace PersonnelManagement.Data.Repository
                     query = query.Include(includeProp);
                 }
             }
-            return await query.FirstOrDefaultAsync();
+            return await query.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task<T> FindAsync(object Id)
@@ -85,7 +85,7 @@ namespace PersonnelManagement.Data.Repository
             }
             else
             {
-                return await Query.ToListAsync();
+                return await Query.AsNoTracking().ToListAsync();
             }
         }
         public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includeProperties = null,
@@ -115,7 +115,8 @@ namespace PersonnelManagement.Data.Repository
                     query = query.Include(includeProp);
                 }
             }
-            return await query.ToListAsync();
+            //_db.SaveChanges();
+            return await query.AsNoTracking().ToListAsync();
         }
         public async Task<T> UpdateAsync(T entity)
         {

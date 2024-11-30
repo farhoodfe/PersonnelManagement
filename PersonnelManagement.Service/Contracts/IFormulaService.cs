@@ -11,6 +11,6 @@ namespace PersonnelManagement.Service.Contracts
     {
         Task<long> CreateFormulaAsync(FormulaDTO formulaDTO);
         Task<List<FormulaDTO>> GetAllFormulasAsync();
-        string CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues);
+        Task<string> CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues);
     }
 }

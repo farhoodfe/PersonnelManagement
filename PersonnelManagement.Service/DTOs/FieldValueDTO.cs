@@ -8,7 +8,7 @@ namespace PersonnelManagement.Service.DTOs
 {
     public class FieldValueDTO
     {
-        public long? FieldId { get; set; }
+        public long FieldId { get; set; }
         public string? Value { get; set; }
 
     }

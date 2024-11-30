@@ -88,10 +88,42 @@ namespace PersonnelManagement.MVC.Controllers
                 }
 
                 // Handle error if the creation fails
-                ModelState.AddModelError(string.Empty, "Error creating personnel information");
+                ModelState.AddModelError(string.Empty, "خطا در ثبت اطلاعات شخص");
             }
 
             return View(model);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> Edit(long id)
+        {
+            var person = await _PersonService.GetPersonByIdAsync(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+            return View(person);
+        }
+
+        // POST: Edit Person
+        [HttpPost]
+        public async Task<IActionResult> Edit(PersonInfoDTO personDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(personDTO);
+            }
+
+            try
+            {
+                await _personnelService.UpdatePersonAsync(personDTO);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Error updating person: {ex.Message}");
+                return View(personDTO);
+            }
         }
     }
 }

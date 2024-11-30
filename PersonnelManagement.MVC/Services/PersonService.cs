@@ -1,4 +1,5 @@
-﻿using PersonnelManagement.MVC.Models.DTOs;
+﻿using PersonnelManagement.MVC.Models;
+using PersonnelManagement.MVC.Models.DTOs;
 using PersonnelManagement.MVC.Services.Contracts;
 using System.Net.Http;
 using System.Text.Json;
@@ -42,6 +43,30 @@ namespace PersonnelManagement.MVC.Services
 
             //return viewModel;
              
+        }
+
+        public async Task<PersonnelData> GetPersonByIdAsync(long id)
+        {
+            var response = await _httpClient.GetAsync("https://localhost:7164/api/Person/"+id.ToString());
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            //return JsonSerializer.Deserialize<PersonnelData>(jsonResponse);
+            var personnelData = await response.Content.ReadFromJsonAsync<PersonnelData>();
+
+            return personnelData;
+
+            //var viewModel = new
+            //{
+            //    PersonId = personnelData.id,
+            //    FName = personnelData.fName,
+            //    LName = personnelData.lName,
+            //    PersonnelCode = personnelData.personnelCode,
+            //    DynamicFields = p.DynamicFields.ToDictionary(df => df.Key, df => df.Value)
+            //}; 
+
+            //return viewModel;
+
         }
     }
 }

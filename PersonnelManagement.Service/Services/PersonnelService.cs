@@ -59,20 +59,36 @@ namespace PersonnelManagement.Service.Services
 
         public async Task<ICollection<PersonInfoDTO>> GetAllPersonsAsync()
         {
-            IEnumerable<PersonInfo> personList;
-            personList = await _RPersonInfo.GetAllAsync(u => u.IsDeleted==false);
-            
-            List<PersonInfoDTO> result = new List<PersonInfoDTO> ();
-            foreach (PersonInfo person in personList)
+            var personList = await _RPersonInfo.GetAllAsync(u => u.IsDeleted == false);
+            var result = new List<PersonInfoDTO>();
+
+            foreach (var person in personList)
             {
-                PersonInfoDTO p = new PersonInfoDTO();
-                p.FName = person.FName;
-                p.LName = person.LName;
-                p.PersonnelCode = person.PersonnelCode;
-                p.Submissions =await GetPersonSubmissions(person.Id);
+                var p = new PersonInfoDTO
+                {
+                    FName = person.FName,
+                    LName = person.LName,
+                    PersonnelCode = person.PersonnelCode,
+                    Submissions = await GetPersonSubmissions(person.Id) // Ensure no DbContext is shared here
+                };
                 result.Add(p);
             }
+
             return result;
+            //IEnumerable<PersonInfo> personList;
+            //personList = await _RPersonInfo.GetAllAsync(u => u.IsDeleted==false);
+
+            //List<PersonInfoDTO> result = new List<PersonInfoDTO> ();
+            //foreach (PersonInfo person in personList)
+            //{
+            //    PersonInfoDTO p = new PersonInfoDTO();
+            //    p.FName = person.FName;
+            //    p.LName = person.LName;
+            //    p.PersonnelCode = person.PersonnelCode;
+            //    p.Submissions =await GetPersonSubmissions(person.Id);
+            //    result.Add(p);
+            //}
+            //return result;
         }
 
         public async Task<PersonInfoDTO> GetPersonById(long Id)
@@ -98,29 +114,50 @@ namespace PersonnelManagement.Service.Services
 
         public async Task<ICollection<SubmissionDTO>> GetPersonSubmissions(long Id)
         {
-            var person = _RPersonInfo.FindAsync(Id);
+            var person = await _RPersonInfo.FindAsync(Id);
             if (person == null)
                 return null;
-            List<SubmissionDTO> result = new List<SubmissionDTO>();
-            List<FieldSubmission> SubList = new List<FieldSubmission>();
-            SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id && (u.IsDeleted == null || u.IsDeleted==false));
-            if (SubList.Count > 0)
+
+            var result = new List<SubmissionDTO>();
+            var submissions = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id && (u.IsDeleted == null || u.IsDeleted == false));
+
+            foreach (var sub in submissions)
             {
-                SubmissionDTO sb = new SubmissionDTO();
-                foreach (FieldSubmission sub in SubList)
+                var fieldDefinition = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
+
+                if (fieldDefinition?.IsDeleted == false || fieldDefinition?.IsDeleted == null)
                 {
-                    DynamicFieldDefinition f = new DynamicFieldDefinition();
-                    f = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
-                    if (f.IsDeleted == false|| f.IsDeleted==null)
-                    {
-                        sb = _mapper.Map<SubmissionDTO>(sub);
-                        sb.DisplayName = f.DisplayName;
-
-                        result.Add(sb);
-                    }                }
-
+                    var sb = _mapper.Map<SubmissionDTO>(sub);
+                    sb.DisplayName = fieldDefinition.DisplayName;
+                    result.Add(sb);
+                }
             }
+
             return result;
+            //var person = _RPersonInfo.FindAsync(Id);
+            //if (person == null)
+            //    return null;
+            //List<SubmissionDTO> result = new List<SubmissionDTO>();
+            //List<FieldSubmission> SubList = new List<FieldSubmission>();
+            //SubList = await _RFieldSubmission.GetAllAsync(u => u.Fk_PersonInfo == Id && (u.IsDeleted == null || u.IsDeleted==false));
+            //await _RFieldSubmission.SaveAsync();
+            //if (SubList.Count > 0)
+            //{
+            //    SubmissionDTO sb = new SubmissionDTO();
+            //    foreach (FieldSubmission sub in SubList)
+            //    {
+            //        DynamicFieldDefinition f = new DynamicFieldDefinition();
+            //        f = await _RFieldDefinition.FindAsync(sub.Fk_FieldDefinition);
+            //        if (f.IsDeleted == false|| f.IsDeleted==null)
+            //        {
+            //            sb = _mapper.Map<SubmissionDTO>(sub);
+            //            sb.DisplayName = f.DisplayName;
+
+            //            result.Add(sb);
+            //        }                }
+
+            //}
+            //return result;
         }
 
         public async Task<PersonInfoDTO> UpdatePerson(long Id, PersonInfoDTO updateDTO)

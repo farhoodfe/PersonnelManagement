@@ -15,11 +15,13 @@ namespace PersonnelManagement.Service.Services
     public class FormulaService : IFormulaService
     {
         private readonly IRepository<Formula> _RFormula;
+        private readonly IFieldDefinitionService _FieldDefinitionService;
         private readonly IMapper _mapper;
-        public FormulaService(IRepository<Formula> formula, IMapper mapper)
+        public FormulaService(IRepository<Formula> formula, IMapper mapper, IFieldDefinitionService fieldDefinitionService)
         {
             _mapper = mapper;
             _RFormula = formula;
+            _FieldDefinitionService = fieldDefinitionService;   
         }
         public async Task<long> CreateFormulaAsync(FormulaDTO formulaDTO)
         {
@@ -41,7 +43,7 @@ namespace PersonnelManagement.Service.Services
         /// <param name="formula"></param>
         /// <param name="fieldValues"></param>
         /// <returns></returns>
-        public string CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues)
+        public async Task<string> CalculateFormulaValue(string formula, List<FieldValueDTO> fieldValues)
         {
             try
             {
@@ -51,7 +53,8 @@ namespace PersonnelManagement.Service.Services
                 // Replace field placeholders with actual values
                 foreach (var field in fieldDict)
                 {
-                    formula = formula.Replace($"{{Field{field.Key}}}", field.Value ?? "0");
+                    formula = formula.Replace($"{{Field{field.Key}}}",(field.Value!=null)? field.Value.ToString():field.Value ?? "0");
+                    
                 }
 
                 // محسابه فرمول بر اساس عملیات ریاضی پایه
@@ -79,7 +82,7 @@ namespace PersonnelManagement.Service.Services
             {
                 formulas.Add(_mapper.Map<FormulaDTO>(f));
             }
-
+            _RFormula.SaveAsync();
             return formulas;
 
         }

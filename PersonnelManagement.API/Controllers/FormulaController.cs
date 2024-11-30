@@ -57,6 +57,7 @@ namespace PersonnelManagement.API.Controllers
                 FormulaDTO formula = new FormulaDTO();
                 // دریافت لیست فرمول ها از دیتابیس
                 List<FormulaDTO> formulaList = await _FormulaService.GetAllFormulasAsync();
+
                 if (formulaList!= null)
                 {
                     formula = formulaList.Where( p => p.Id == formulaModel.FormulaId).FirstOrDefault();
@@ -77,6 +78,8 @@ namespace PersonnelManagement.API.Controllers
                     //return Ok(new { Success = true, Result = result });
                     return Ok(result);
                 }
+
+           
 
                 return NotFound();
                 //return NotFound(new { Success = false, Message = "Formula not found" });
