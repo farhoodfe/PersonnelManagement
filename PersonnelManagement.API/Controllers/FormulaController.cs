@@ -68,7 +68,7 @@ namespace PersonnelManagement.API.Controllers
 
                 fieldValues = personSubmissions.Select(p => new FieldValueDTO
                 {
-                    FieldId = p.Fk_FieldDefinition,
+                    FieldId = (long)p.Fk_FieldDefinition,
                     Value = p.FieldValue
                 }).ToList();
                 

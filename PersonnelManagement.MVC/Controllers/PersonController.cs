@@ -106,24 +106,24 @@ namespace PersonnelManagement.MVC.Controllers
         }
 
         // POST: Edit Person
-        [HttpPost]
-        public async Task<IActionResult> Edit(PersonInfoDTO personDTO)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(personDTO);
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(PersonInfoDTO personDTO)
+        //{
+        //if (!ModelState.IsValid)
+        //{
+        //    return View(personDTO);
+        //}
 
-            try
-            {
-                await _personnelService.UpdatePersonAsync(personDTO);
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $"Error updating person: {ex.Message}");
-                return View(personDTO);
-            }
-        }
+        //try
+        //{
+        //    await _personnelService.UpdatePersonAsync(personDTO);
+        //    return RedirectToAction("Index");
+        //}
+        //catch (Exception ex)
+        //{
+        //    ModelState.AddModelError(string.Empty, $"Error updating person: {ex.Message}");
+        //    return View(personDTO);
+        //}
+        //}
     }
 }
